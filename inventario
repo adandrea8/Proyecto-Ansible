@@ -1,0 +1,11 @@
+
+[Redhat]
+rocky.taller.uy	ansible_host=192.168.56.103
+
+[Debian]
+ubuntuserver.taller.uy	ansible_host=192.168.56.102
+
+[linux:children]
+Redhat
+Debian
+
