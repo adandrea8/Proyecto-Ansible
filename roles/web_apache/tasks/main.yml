@@ -1,12 +1,15 @@
 ---
 # tasks file for web_apache
-- hosts: redhat
+
+- name: Instalar y configurar Servidor Apache
+  hosts: Redhat
   become: yes
   remote_user: sysadmin
+
   tasks:
 
   - name: Instalar apache
-    yum:
+    dnf:
       name: httpd
       state: present
 
@@ -25,3 +28,4 @@
       name: httpd
       enabled: true
       state: started
+

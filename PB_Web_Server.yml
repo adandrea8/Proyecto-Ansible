@@ -1,5 +1,5 @@
 ---
-- hosts: redhat
+- hosts: Redhat
   become: yes
   remote_user: ansible
 
@@ -21,6 +21,7 @@
       dest: /etc/httpd/vhosts.d/web.conf
     notify: Restart apache
 
+
   - name: Include vhosts directory
     lineinfile:
       path: /etc/httpd/conf/httpd.conf
@@ -30,7 +31,7 @@
   - name: Copiar archivo index
     template:
       src: ./files/index.j2
-      dest: /var/www/ejemplo/html/index.html
+      dest: /var/www/web/html/index.html
       owner: apache
       group: apache
       mode: '644'
