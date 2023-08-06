@@ -1,13 +1,13 @@
 # tallerjulio2023
-
+-
 ## inventario
 ### Para la habilitacion del inventario, agregamos la siguiente linea a ansible.cnf:
 inventory=./inventario
-
+-
 ### En inventario tenemos dos grupos y un supergrupo que incluye a ambos:
 [redhat]
 rocky.taller.uy	ansible_host=192.168.56.103
-
+-
 [debian]
 ubuntuserver.taller.uy	ansible_host=192.168.56.102
 
