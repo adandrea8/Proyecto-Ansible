@@ -5,9 +5,12 @@
   dnf:
    name: podman
    state: present
+  when: ansible_os_family == 'RedHat'
 
 - name: Habilitar podman para que inicie con el sistema
   service:
    name: podman
    enabled: true
    state: started
+  when: ansible_os_family == 'RedHat'
+ 
