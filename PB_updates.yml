@@ -24,5 +24,4 @@
   handlers:
 
   - name: Restart server
-    reboot: 
-
+    reboot:  
