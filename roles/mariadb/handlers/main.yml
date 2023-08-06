@@ -1,2 +1,15 @@
 ---
 # handlers file for mariadb
+#
+- name: Reload firewalld
+  service:
+    name: firewalld
+    state: reloaded
+  when: ansible_os_family == 'RedHat'
+
+- name: Reload ufw
+  service:
+    name: ufw
+    state: reloaded
+  when: ansible_os_family == 'Debian'
+

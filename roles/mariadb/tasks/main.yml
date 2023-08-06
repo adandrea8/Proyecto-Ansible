@@ -1,2 +1,49 @@
 ---
-# tasks file for mariadb
+# tasks file for apache
+
+  - name: Instalar mariadb en RedHat
+    dnf:
+      name: mariadb-server
+      state: present
+    when: ansible_os_family == 'RedHat'
+
+  - name: Iniciar y habilitar en RedHat
+    service:
+      name: mariadb
+      enabled: true
+      state: started
+    when: ansible_os_family == 'RedHat'
+
+    - name: Abrir el puerto 3306 en el firewall en RedHat
+      firewalld:
+        port: 3306/tcp
+        permanent: yes
+        state: enabled
+      when: ansible_os_family == 'RedHat'
+      notify: Reload firewalld
+
+
+
+
+  - name: Instalar mariadb en Debian
+    apt:
+      name: mariadb-server
+      state: present
+    when: ansible_os_family == 'Debian'
+
+  - name: Iniciar y habilitar en Debian
+    service:
+      name: mariadb
+      enabled: true
+      state: started
+    when: ansible_os_family == 'Debian'
+
+  - name: Abrir el puerto 3306 en el firewall en Debian
+    ufw:
+      rule: allow
+      port: 3306
+      proto: tcp
+    when: ansible_os_family == 'Debian'
+    notify: Reload ufw
+
+

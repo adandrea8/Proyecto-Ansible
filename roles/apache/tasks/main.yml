@@ -25,3 +25,29 @@
       state: started
     when: ansible_os_family == 'RedHat'
 
+
+
+  - name: Instalar apache Debian
+    apt:
+      name: httpd
+      state: present
+    when: ansible_os_family == 'Debian'
+
+    # - name: Abrir puertos del firewall
+    #firewalld:
+    # service: "{{ item }}"
+    # state: enabled
+    # permanent: true
+    # immediate: true
+    #loop:
+    #- http
+    #- https
+    #when: ansible_os_family == 'Debian'
+
+  - name: Iniciar y habilitar httpd service en Debian
+    service:
+      name: httpd
+      enabled: true
+      state: started
+    when: ansible_os_family == 'Debian'
+
