@@ -1,17 +1,11 @@
 ---
-# tasks file for web_apache
-
-- name: Instalar y configurar Servidor Apache
-  hosts: Redhat
-  become: yes
-  remote_user: sysadmin
-
-  tasks:
+# tasks file for apache
 
   - name: Instalar apache
     dnf:
       name: httpd
       state: present
+    when: ansible_os_family == 'RedHat'
 
   - name: Abrir puertos del firewall
     firewalld:
@@ -22,10 +16,12 @@
     loop:
     - http
     - https
+    when: ansible_os_family == 'RedHat'
 
   - name: Iniciar y habilitar httpd service
     service:
       name: httpd
       enabled: true
       state: started
+    when: ansible_os_family == 'RedHat'
 

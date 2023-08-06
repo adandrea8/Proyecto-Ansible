@@ -1,11 +1,11 @@
 ---
-- hosts: Redhat
+- hosts: redhat
   become: yes
   remote_user: ansible
 
   roles:
 
-    - web_apache
+     - role: apache
 
   tasks:
 
@@ -26,7 +26,14 @@
     lineinfile:
       path: /etc/httpd/conf/httpd.conf
       line: IncludeOptional /etc/httpd/vhosts.d/*.conf  
-  
+ 
+
+  - name: Crear el directorio para index
+    file:
+      path: /var/www/web/html
+      state: directory
+      owner: ansible
+
 
   - name: Copiar archivo index
     template:

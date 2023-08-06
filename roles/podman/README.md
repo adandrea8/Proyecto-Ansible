@@ -23,30 +23,10 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: redhat
+    - hosts: servers
       roles:
-         - { web_apache: ansible.web_apache, x: 42 }
-# Instalamos apache con la siguiente tarea
-  - name: Instalar apache
-    yum:
-      name: httpd
-      state: present
-# Abrimos los puertos del firewall con la siguiente tarea
-  - name: Abrir puertos del firewall
-    firewalld:
-      service: "{{ item }}"
-      state: enabled
-      permanent: true
-      immediate: true
-    loop:
-    - http
-    - https
-# Iniciamos y habilitamos el servicio de apache con la siguiente tarea
-  - name: Iniciar y habilitar httpd service
-    service:
-      name: httpd
-      enabled: true
-      state: started
+         - { role: username.rolename, x: 42 }
+
 License
 -------
 

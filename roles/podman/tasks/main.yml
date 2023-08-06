@@ -1,0 +1,13 @@
+---
+# tasks file for podman
+
+- name: Instalar Podman
+  dnf:
+   name: podman
+   state: present
+
+- name: Habilitar podman para que inicie con el sistema
+  service:
+   name: podman
+   enabled: true
+   state: started

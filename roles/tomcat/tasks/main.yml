@@ -1,0 +1,16 @@
+---
+# tasks file for tomcat
+
+- name: Instalar Java y Tomcat
+  dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - java-11-openjdk-devel
+    - tomcat
+
+- name: Habilitar Tomcat para inicio automático
+  service:
+    name: tomcat
+    enabled: true
+    state: started
