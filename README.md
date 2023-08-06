@@ -1,10 +1,10 @@
 # tallerjulio2023
 
-##inventario
-###Para la habilitacion del inventario, agregamos la siguiente linea a ansible.cnf:
+## inventario
+### Para la habilitacion del inventario, agregamos la siguiente linea a ansible.cnf:
 inventory=./inventario
 
-###En inventario tenemos dos grupos y un supergrupo que incluye a ambos:
+### En inventario tenemos dos grupos y un supergrupo que incluye a ambos:
 [redhat]
 rocky.taller.uy	ansible_host=192.168.56.103
 
@@ -15,29 +15,29 @@ ubuntuserver.taller.uy	ansible_host=192.168.56.102
 redhat
 debian
 
-##var
+## var
 
-###En var tenemos las variables creadas para nuestros playbooks:
+### En var tenemos las variables creadas para nuestros playbooks:
 
 ##roles
 
-###En el directorio roles, creamos todos los roles que utilizaremos para nuestros playbooks:
+### En el directorio roles, creamos todos los roles que utilizaremos para nuestros playbooks:
 apache
 mariadb
 podman
 tomcat
 
-##files
+## files
 
-###En el directorio files, creamos y cargamos todos los archivos para nuestros playbooks:
+### En el directorio files, creamos y cargamos todos los archivos para nuestros playbooks:
 app.properties
 index.j2
 todo.war
 virtualhost.conf
 
-##PB_updates.yml
+## PB_updates.yml
 
-###El playbook PB_updates.yml actualizará todos los servidores:
+### El playbook PB_updates.yml actualizará todos los servidores:
 ---
 - hosts: linux
   become: yes
@@ -66,9 +66,9 @@ virtualhost.conf
   - name: Restart server
     reboot:
 
-##PB_Web_Server.yml
+## PB_Web_Server.yml
 
-###El playbook PB_Web_Server.yml instalara apache con proxy reverso en los servidores Rocky
+### El playbook PB_Web_Server.yml instalara apache con proxy reverso en los servidores Rocky
 ---
 - hosts: redhat
   become: yes
@@ -121,9 +121,9 @@ virtualhost.conf
       name: httpd
       state: restarted
 
-##PB_app_web.yml
+## PB_app_web.yml
 
-###El playbook PB_app_web.yml, instalara podman y creara una aplicacion en su contenedor
+### El playbook PB_app_web.yml, instalara podman y creara una aplicacion en su contenedor
 ---
 - name: Instalar y configurar Tomcat en Podman 
   hosts: redhat
