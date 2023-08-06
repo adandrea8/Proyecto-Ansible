@@ -1,0 +1,43 @@
+---
+- hosts: redhat
+  become: yes
+  remote_user: ansible
+
+  roles:
+
+    - web_apache
+
+  tasks:
+
+  - name: Crear el virtualhost con la configuracion del directorio
+    file:
+      path: /etc/httpd/vhosts.d
+      state: directory
+      owner: ansible
+
+  - name: Copiar virtualhost de configuracion
+    copy:
+      src: ./files/virtualhost.conf
+      dest: /etc/httpd/vhosts.d/web.conf
+    notify: Restart apache
+
+  - name: Include vhosts directory
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      line: IncludeOptional /etc/httpd/vhosts.d/*.conf  
+  
+
+  - name: Copiar archivo index
+    template:
+      src: ./files/index.j2
+      dest: /var/www/ejemplo/html/index.html
+      owner: apache
+      group: apache
+      mode: '644'
+
+  handlers:
+
+  - name: Restart apache
+    service:
+      name: httpd
+      state: restarted    
