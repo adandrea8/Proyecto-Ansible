@@ -43,7 +43,7 @@ Para utilizar Ansible, primero debemos instalarlo en nuestra máquina bastion:
 pip install ansible
 ```
 
-El archivo ansible.cfg lo creamos de la siguiente manera:
+El archivo `ansible.cfg` lo creamos de la siguiente manera:
 
 ```bash
 ansible-config init --disabled > ansible.cfg
@@ -53,7 +53,7 @@ ansible-config init --disabled > ansible.cfg
 ## Inventario
 Creamos un archivo inventario para agregar los hosts y grupos de hosts a utilizar 
 
-Dentro del archivo ansible.cfg indicamos que vamos a utilizar nuestro inventario.
+Dentro del archivo `ansible.cfg` indicamos que vamos a utilizar nuestro inventario.
 
 ```bash
 inventory=./inventario
@@ -78,7 +78,7 @@ En var tenemos las variables creadas para nuestros playbooks:
 
 ## Roles
 
-En el directorio /roles, creamos todos los roles que utilizaremos para nuestros playbooks:
+En el directorio `/roles`, creamos todos los roles que utilizaremos para nuestros playbooks:
 
 - **apache** : 
   - Instalar apache, abrir puertos http, https, iniciar y habilitar el servicio.
@@ -90,7 +90,7 @@ En el directorio /roles, creamos todos los roles que utilizaremos para nuestros 
 
 
 ## files
-En el directorio files, creamos y cargamos todos los archivos para nuestros playbooks:
+En el directorio `/files`, creamos y cargamos todos los archivos para nuestros playbooks:
 
 - app.properties
 - Dockerfile
@@ -101,7 +101,7 @@ En el directorio files, creamos y cargamos todos los archivos para nuestros play
 
 ## PB_updates.yml
 
-El playbook PB_updates.yml actualizará todos los paquetes en los servidores.
+El playbook `PB_updates.yml` actualizará todos los paquetes en los servidores.
 
 ```bash
 ansible-playbook PB_updates.yml
@@ -110,7 +110,7 @@ ansible-playbook PB_updates.yml
 
 ## PB_Web_Server.yml
 
-El playbook PB_Web_Server.yml instalara apache con proxy reverso en los servidores Rocky.
+El playbook `PB_Web_Server.yml` instalara apache con proxy reverso en los servidores Rocky.
 
 ```bash
 ansible-playbook PB_Web_Server.yml
@@ -118,7 +118,7 @@ ansible-playbook PB_Web_Server.yml
 
 ## PB_app_web.yml
 
-El playbook PB_app_web.yml, instalara podman y creara una aplicacion "todo.war" en un contenedor con podman.
+El playbook `PB_app_web.yml`, instalara podman y creara una aplicacion "todo.war" en un contenedor con podman.
 
 ```bash
 ansible-playbook PB_app_web.yml
