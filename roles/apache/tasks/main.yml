@@ -33,20 +33,23 @@
       state: present
     when: ansible_os_family == 'Debian'
 
-    # - name: Abrir puertos del firewall
-    #firewalld:
-    # service: "{{ item }}"
-    # state: enabled
-    # permanent: true
-    # immediate: true
-    #loop:
-    #- http
-    #- https
-    #when: ansible_os_family == 'Debian'
+  - name: Abrir puerto HTTP en Debian
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+    when: ansible_os_family == 'Debian'
+
+  - name: Abrir puerto HTTPS en Debian
+      ufw:
+        rule: allow
+        port: 443
+        proto: tcp
+    when: ansible_os_family == 'Debian'
 
   - name: Iniciar y habilitar httpd service en Debian
     service:
-      name: httpd
+      name: apache2
       enabled: true
       state: started
     when: ansible_os_family == 'Debian'

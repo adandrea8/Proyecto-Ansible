@@ -1,2 +1,11 @@
-localhost
+
+[redhat]
+rocky.taller.uy	ansible_host=192.168.56.103
+
+[debian]
+ubuntuserver.taller.uy	ansible_host=192.168.56.102
+
+[linux:children]
+redhat
+debian
 

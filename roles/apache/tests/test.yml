@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
-  remote_user: root
+- hosts: linux
+  remote_user: ansible
   roles:
     - apache
