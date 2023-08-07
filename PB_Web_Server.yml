@@ -20,7 +20,7 @@
       src: ./files/virtualhost.conf
       dest: /etc/httpd/vhosts.d/web.conf
     notify: Restart apache
-
+    
 
   - name: Include vhosts directory
     lineinfile:
@@ -43,9 +43,8 @@
       group: apache
       mode: '644'
 
-  handlers:
-
-  - name: Restart apache
-    service:
-      name: httpd
-      state: restarted    
+  - name:  SELinux
+    ansible.posix.seboolean:
+      name: httpd_can_network_connect
+      state: yes
+      persistent: yes
