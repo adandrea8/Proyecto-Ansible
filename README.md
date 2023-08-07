@@ -1,10 +1,66 @@
-# tallerjulio2023
 
-## inventario
-### Para la habilitacion del inventario, agregamos la siguiente linea a ansible.cnf:
+# Taller Julio 2023 - ASLX 
+Este es un repositorio donde contiene información sobre como utilizar Ansible para las tareas planteadas por el obligatorio de el taller de Linux
+
+Ansible es una herramienta de automatización que permite gestionar la configuración y el despliegue de servidores de manera eficiente y reproducible.
+
+### Para utilizar este repositorio
+
+Clonar el proyecto
+
+```bash
+  git clone git@github.com:adandrea8/tallerjulio2023.git
+```
+
+Set branch
+
+```bash
+  git branch -M main
+```
+Traer ultimos cambios
+
+```bash
+  git pull
+```
+
+Enviar cambios
+
+```bash
+  git push -u origin main
+```
+
+Ver modificaciones
+
+```bash
+  git log
+```
+
+## Instalación
+
+Para utilizar Ansible, primero debemos instalarlo en nuestra máquina bastion:
+
+```bash
+pip install ansible
+```
+
+El archivo ansible.cfg lo creamos de la siguiente manera:
+
+```bash
+ansible-config init --disabled > ansible.cfg
+```
+
+
+## Inventario
+Creamos un archivo inventario para agregar los hosts y grupos de hosts a utilizar 
+
+Dentro del archivo ansible.cfg indicamos que vamos a utilizar nuestro inventario.
+
+```bash
 inventory=./inventario
+```
+En inventario tenemos dos grupos y un supergrupo que incluye a ambos:
 
-### En inventario tenemos dos grupos y un supergrupo que incluye a ambos:
+```bash
 [redhat]
 rocky.taller.uy	ansible_host=192.168.56.103
 
@@ -13,164 +69,69 @@ ubuntuserver.taller.uy	ansible_host=192.168.56.102
 
 [linux:children]
 redhat
-debian
+debian 
+```
 
-## var
+## Var
 
-### En var tenemos las variables creadas para nuestros playbooks:
+En var tenemos las variables creadas para nuestros playbooks:
 
-## roles
+## Roles
 
-### En el directorio roles, creamos todos los roles que utilizaremos para nuestros playbooks:
-apache
-mariadb
-podman
-tomcat
+En el directorio /roles, creamos todos los roles que utilizaremos para nuestros playbooks:
+
+- **apache** : 
+  - Instalar apache, abrir puertos http, https, iniciar y habilitar el servicio.
+- **mariadb :**
+  - Instalar mariadb, abrir puerto 3306 en el firewall y iniciar y habilitar el servicio.
+- **podman:**
+  - Instalar podman, iniciar y habilitar el servicio.
+- **firewall.debian**
+
 
 ## files
+En el directorio files, creamos y cargamos todos los archivos para nuestros playbooks:
 
-### En el directorio files, creamos y cargamos todos los archivos para nuestros playbooks:
-app.properties
-index.j2
-todo.war
-virtualhost.conf
+- app.properties
+- Dockerfile
+- todo.war
+- index.j2
+- virtualhost.conf
+
 
 ## PB_updates.yml
 
-### El playbook PB_updates.yml actualizará todos los servidores:
----
-- hosts: linux
-  become: yes
-  remote_user: sysadmin
+El playbook PB_updates.yml actualizará todos los paquetes en los servidores.
 
-  tasks:
+```bash
+ansible-playbook PB_updates.yml
+```
 
-  - name: Update all available packages for RedHat servers
-    yum:
-      name: "*"
-      state: latest
-    notify: Restart server
-    when: ansible_os_family == "RedHat"
-
-  - name: Update all available packages for Debian servers
-    apt:
-      name: "*"
-      state: latest
-      update_cache: yes
-    notify: Restart server
-    when: ansible_os_family == "Debian" 
-
-
-  handlers:
-
-  - name: Restart server
-    reboot:
 
 ## PB_Web_Server.yml
 
-### El playbook PB_Web_Server.yml instalara apache con proxy reverso en los servidores Rocky
----
-- hosts: redhat
-  become: yes
-  remote_user: ansible
+El playbook PB_Web_Server.yml instalara apache con proxy reverso en los servidores Rocky.
 
-  roles:
-
-     - role: apache
-
-  tasks:
-
-  - name: Crear el virtualhost con la configuracion del directorio
-    file:
-      path: /etc/httpd/vhosts.d
-      state: directory
-      owner: ansible
-
-  - name: Copiar virtualhost de configuracion
-    copy:
-      src: ./files/virtualhost.conf
-      dest: /etc/httpd/vhosts.d/web.conf
-    notify: Restart apache
-
-
-  - name: Include vhosts directory
-    lineinfile:
-      path: /etc/httpd/conf/httpd.conf
-      line: IncludeOptional /etc/httpd/vhosts.d/*.conf  
- 
-
-  - name: Crear el directorio para index
-    file:
-      path: /var/www/web/html
-      state: directory
-      owner: ansible
-
-
-  - name: Copiar archivo index
-    template:
-      src: ./files/index.j2
-      dest: /var/www/web/html/index.html
-      owner: apache
-      group: apache
-      mode: '644'
-
-  handlers:
-
-  - name: Restart apache
-    service:
-      name: httpd
-      state: restarted
+```bash
+ansible-playbook PB_Web_Server.yml
+```
 
 ## PB_app_web.yml
 
-### El playbook PB_app_web.yml, instalara podman y creara una aplicacion en su contenedor
----
-- name: Instalar y configurar Tomcat en Podman 
-  hosts: redhat
-  become: yes
+El playbook PB_app_web.yml, instalara podman y creara una aplicacion "todo.war" en un contenedor con podman.
 
-  roles:
-    - role: podman
-
-  tasks:
-
-    - name: Crear directorio para el contenedor
-      file:
-        path: /ansible/contenedor/appweb
-        state: directory
-
-    - name: Copiar todo.war a la ruta
-      copy:
-        src: ./files/todo.war
-        dest: /ansible/contenedor/appweb/todo.war
-
-    - name: Copiar app.properties a la ruta
-      copy:
-        src: ./files/app.properties
-        dest: /ansible/contenedor/appweb/app.properties
-        
+```bash
+ansible-playbook PB_app_web.yml
+```
 
 
-    - name: Crear imagen y configurar el contenedor con Podman
-      podman_image:
-        name: appweb
-        build:
-          context: /ansible/contenedor/appweb/
-          dockerfile:
-            FROM tomcat:9.0
-            RUN mkdir /opt/config
-            COPY app.properties /opt/config
-            COPY todo.war /usr/local/tomcat/webapps/
-            EXPOSE 8080
-            CMD ["catalina.sh", "run"]
-        state: present
+## Soporte
+
+Por soporte, email a alexisxdandrea@hotmail.com o mensaje a [nicolasemm](https://github.com/nicolasemm)
 
 
-    - name: Configurar y ejecutar
-      containers.podman.podman_image:
-        name: "appweb"
-        path: '/opt/config'
-        build:
-         format: docker
-        state: present
-      register: results
+## Autores
+
+- [Alexis D'Andra](https://www.github.com/adandrea8)
+- [Nicolas Martins](https://github.com/nicolasemm)
+
