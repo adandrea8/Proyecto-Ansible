@@ -9,7 +9,7 @@
 
   tasks:
 
-  - name: Crear el virtualhost con la configuracion del directorio
+  - name: Crear el directorio para los virtualhosts
     file:
       path: /etc/httpd/vhosts.d
       state: directory
@@ -21,19 +21,16 @@
       dest: /etc/httpd/vhosts.d/web.conf
     notify: Restart apache
     
-
   - name: Include vhosts directory
     lineinfile:
       path: /etc/httpd/conf/httpd.conf
       line: IncludeOptional /etc/httpd/vhosts.d/*.conf  
  
-
   - name: Crear el directorio para index
     file:
       path: /var/www/web/html
       state: directory
       owner: ansible
-
 
   - name: Copiar archivo index
     template:
@@ -43,7 +40,7 @@
       group: apache
       mode: '644'
 
-  - name:  SELinux
+  - name:  Habilitar salida web en SELinux
     ansible.posix.seboolean:
       name: httpd_can_network_connect
       state: yes
