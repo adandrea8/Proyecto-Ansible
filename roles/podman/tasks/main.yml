@@ -2,13 +2,13 @@
 # tasks file for podman
 #RedHat
 
-- name: Instalar Podman
+- name: Instalar Podman en RedHat
   dnf:
    name: podman
    state: present
   when: ansible_os_family == 'RedHat'
 
-- name: Habilitar podman para que inicie con el sistema
+- name: Habilitar podman para que inicie con el sistema en RedHat
   service:
    name: podman
    enabled: true
@@ -17,13 +17,13 @@
 
 #Debian
 
-- name: Instalar Podman
+- name: Instalar Podman en Debian
   apt:
    name: podman
    state: present
   when: ansible_os_family == 'Debian'
 
-- name: Habilitar podman para que inicie con el sistema
+- name: Habilitar podman para que inicie con el sistema en Debian
   service:
    name: podman
    enabled: true

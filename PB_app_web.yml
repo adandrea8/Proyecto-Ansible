@@ -2,6 +2,7 @@
 - name: Instalar y configurar Tomcat en Podman 
   hosts: redhat
   become: yes
+  remote_user: ansible
 
   roles:
     - role: podman
@@ -23,34 +24,28 @@
         src: ./files/app.properties
         dest: /ansible/contenedor/appweb/app.properties
         
-
-
-    - name: Crear imagen y configurar el contenedor con Podman
-      podman_image:
-        name: appweb
-        build:
-          context: /ansible/contenedor/appweb/
-          dockerfile:
-            FROM tomcat:9.0
-            RUN mkdir /opt/config
-            COPY app.properties /opt/config
-            COPY todo.war /usr/local/tomcat/webapps/
-            EXPOSE 8080
-            CMD ["catalina.sh", "run"]
-        state: present
-
+    - name: Copiar dockerfile a la ruta
+      copy:
+        src: ./files/Dockerfile
+        dest: /ansible/contenedor/appweb/Dockerfile
 
     - name: Configurar y ejecutar
       containers.podman.podman_image:
         name: "appweb"
-        path: '/opt/config'
+        path: '/ansible/contenedor/appweb/'
         build:
-         format: docker
+          format: docker
         state: present
       register: results
 
-        # - name: Crear imagen 
-        # command: podman build -t appweb /ansible/contenedor/appweb/
-        #args:
-        #executable: /bin/bash
+    - name: Iniciar contenedor
+      containers.podman.podman_container:
+        name: appweb
+        image: appweb
+        state: started
+        etc_hosts:
+          other: "192.168.56.103"
+        ports:
+          - "8080:8080"  
+
 
