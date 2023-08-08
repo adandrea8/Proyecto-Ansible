@@ -6,7 +6,7 @@ El rol mariadb, instala mariadb-server, mariadb-client, python3 y PyMySQL. Abre 
 
 
 
-Role Variables
+Variables
 --------------
 
 En variables incluimos el archivo de contraseña para el root.
@@ -23,3 +23,30 @@ Añadir rol a un playbook
 
       roles:
          - { role: mariadb }
+
+
+
+Handlers
+--------------
+
+Procesos que acumula llamados para realizar un solo reinicio
+
+```
+  - name: Reload firewalld
+    service:
+      name: firewalld
+      state: reloaded
+    when: ansible_os_family == 'RedHat'
+
+  - name: Reload ufw
+    service:
+      name: ufw
+      state: reloaded
+    when: ansible_os_family == 'Debian'
+
+  - name: Restart mariadb server
+    service:
+      name: mariadb
+      state: restarted
+    when: ansible_os_family == 'Debian'
+    ```
