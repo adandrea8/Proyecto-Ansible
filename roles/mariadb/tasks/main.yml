@@ -24,26 +24,41 @@
 
 
 
-
-  - name: Instalar mariadb en Debian
+ - name: Mariadb server install
     apt:
-      name: mariadb-server
+      name: "{{ item }}"
       state: present
+      update_cache: yes
+    loop:
+      - mariadb-server
+      - mariadb-client
+      - python3-pip
     when: ansible_os_family == 'Debian'
 
-  - name: Iniciar y habilitar en Debian
+
+  - name: Install PyMySQL with pip
+    pip:
+      name: PyMySQL
+      executable: pip3
+      extra_args: --user
+    when: ansible_os_family == 'Debian'
+
+    
+  - name: Mariadb service enable and start
     service:
       name: mariadb
-      enabled: true
       state: started
+      enabled: yes
     when: ansible_os_family == 'Debian'
+    
 
-  - name: Abrir el puerto 3306 en el firewall en Debian
+- name: Abrir el puerto 3306 en el firewall en Debian
     ufw:
       rule: allow
       port: 3306
       proto: tcp
+      notify: Reload ufw
     when: ansible_os_family == 'Debian'
-    notify: Reload ufw
+  
 
 
