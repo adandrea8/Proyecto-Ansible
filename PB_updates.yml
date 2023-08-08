@@ -1,26 +1,31 @@
 ---
 - hosts: linux
   become: yes
+  remote_user: ansible
 
   tasks:
 
-  - name: Update all available packages for RedHat servers
-    yum:
+  - name: Actualizar los paquetes disponibles en RedHat
+    dnf:
       name: "*"
       state: latest
-    notify: Restart server
     when: ansible_os_family == "RedHat"
 
-  - name: Update all available packages for Debian servers
+  - name: Reiniciar RedHat
+    reboot:
+    when: ansible_os_family == "RedHat"
+
+
+
+  - name: Actualizar los paquetes disponibles en Debian
     apt:
       name: "*"
       state: latest
       update_cache: yes
-    notify: Restart server
     when: ansible_os_family == "Debian" 
 
 
-  handlers:
-
-  - name: Restart server
-    reboot:  
+  - name: Reiniciar Debian
+    reboot:
+    when: ansible_os_family == "Debian"
+  
