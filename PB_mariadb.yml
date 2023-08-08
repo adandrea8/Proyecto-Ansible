@@ -17,11 +17,6 @@
       line: bind-address = 0.0.0.0
     notify: Restart mariadb server
 
-  - name: Open mariadb ports
-    ufw:
-     rule: allow
-     port: '3306'
-     proto: tcp
 
 #MySQL Secure Installation
   - name: Update MariaDB root password
