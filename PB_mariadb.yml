@@ -44,11 +44,12 @@
         
 
   - name: Crear estructura bd todo
-    mysql_db:
+    community.mysql.mysql_db:
+     login_host: localhost
      login_user: root
      login_password: "{{ pass }}"
      name: todo
-     state: present
+     state: import
      target: /ansible/sql/statement_todo.sql
 
   
