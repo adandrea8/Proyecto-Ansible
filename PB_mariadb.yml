@@ -1,1 +1,53 @@
+---
+- hosts: ubuntu
+  remote_user: sysadmin
+  become: yes
+  vars_files:
+    - dbpassword.yml
 
+  tasks:
+
+  - name: Configure mariadb to listen on all interfaces
+    lineinfile:
+      path: /etc/mysql/mariadb.conf.d/50-server.cnf
+      regexp: '^bind-address'
+      line: bind-address = 0.0.0.0
+    notify: Restart mariadb server
+
+  - name: Open mariadb ports
+    ufw:
+     rule: allow
+     port: '3306'
+     proto: tcp
+
+#MySQL Secure Installation
+  - name: Update MariaDB root password
+    mysql_user:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      login_user: root
+      login_password: "{{ rootpass }}"
+      check_implicit_admin: yes 
+      name: root
+      host: "{{ item }}"
+      password: "{{ rootpass }}" 
+    loop:
+      - 127.0.0.1
+      - localhost
+      - 192.168.56.%
+
+  - name: Delete anonymous user
+    mysql_user:
+      login_host: localhost
+      login_user: root
+      login_password: "{{ rootpass }}"
+      name: ""
+      host_all: yes
+      state: absent
+
+  - name: Delete test database
+    mysql_db:
+      login_host: localhost
+      login_user: root
+      login_password: "{{ rootpass }}"
+      name: test
+      state: absent
