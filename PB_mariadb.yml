@@ -4,6 +4,9 @@
   become: yes
   vars_files:
     - dbpassword.yml
+    
+  roles:
+     - role: mariadb
 
   tasks:
 
