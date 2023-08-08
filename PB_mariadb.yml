@@ -25,32 +25,31 @@
       - localhost
       - 192.168.56.%
 
-    - name: Crear base de datos todo en mariadb
-      mysql_db:
-        login_user: root
-        login_password: "{{ pass }}"
-        name: todo
+  - name: Crear base de datos todo en mariadb
+    mysql_db:
+      login_user: root
+      login_password: "{{ pass }}"
+      name: todo
 
+  - name: Crear directorio para repositorio sql
+    file:
+      path: /ansible/sql
+      state: directory
+
+
+  - name: Copiar statament de la bd todo a la ruta
+    copy:
+      src: ./files/statement_todo.sql
+      dest: /ansible/sql/statement_todo.sql
         
-    - name: Crear directorio para repositorio sql
-      file:
-        path: /ansible/sql
-        state: directory
 
-
-    - name: Copiar statament de la bd todo a la ruta
-      copy:
-        src: ./files/statement_todo.sql
-        dest: /ansible/sql/statement_todo.sql
-        
-
-    -name: Crear estructura bd todo
-     mysql_db:
-       login_user: root
-       login_password: "{{ pass }}"
-       name: todo
-       state: present
-       target: /ansible/sql/statement_todo.sql
+  - name: Crear estructura bd todo
+    mysql_db:
+     login_user: root
+     login_password: "{{ pass }}"
+     name: todo
+     state: present
+     target: /ansible/sql/statement_todo.sql
 
   
       
