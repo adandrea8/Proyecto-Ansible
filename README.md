@@ -1,5 +1,4 @@
-
-# Taller Julio 2023 - ASLX 
+# _Taller Julio 2023 - ASLX_ 
 Este es un repositorio donde contiene información sobre como utilizar Ansible para las tareas planteadas por el obligatorio de el taller de Linux
 
 Ansible es una herramienta de automatización que permite gestionar la configuración y el despliegue de servidores de manera eficiente y reproducible.
@@ -72,21 +71,22 @@ redhat
 debian 
 ```
 
-## Var
-
-En var tenemos las variables creadas para nuestros playbooks:
 
 ## Roles
 
 En el directorio `/roles`, creamos todos los roles que utilizaremos para nuestros playbooks:
 
-- **apache** : 
+- _**apache** :_
   - Instalar apache, abrir puertos http, https, iniciar y habilitar el servicio.
-- **mariadb :**
+- _**mariadb :**_
   - Instalar mariadb, abrir puerto 3306 en el firewall y iniciar y habilitar el servicio.
-- **podman:**
+- _**podman:**_
   - Instalar podman, iniciar y habilitar el servicio.
-- **firewall.debian**
+- _**firewall.debian:**_
+    - Habilita el firewall y crea reglas para que permita el trafico saliente y deshabilita el tráfico entrante.
+
+
+_Dentro de los roles existen archivos secundarios como los handlers y variables cuales nos facilitan con la optimizacion del codigo._
 
 
 ## files
@@ -97,11 +97,12 @@ En el directorio `/files`, creamos y cargamos todos los archivos para nuestros p
 - todo.war
 - index.j2
 - virtualhost.conf
+- statement_todo.sql
 
 
 ## PB_updates.yml
 
-El playbook `PB_updates.yml` actualizará todos los paquetes en los servidores.
+El playbook `PB_updates.yml`, actualizará todos los paquetes instalados en los servidores.
 
 ```bash
 ansible-playbook PB_updates.yml
@@ -110,7 +111,7 @@ ansible-playbook PB_updates.yml
 
 ## PB_Web_Server.yml
 
-El playbook `PB_Web_Server.yml` instalara apache con proxy reverso en los servidores Rocky.
+El playbook `PB_Web_Server.yml`, instalara apache con proxy reverso en los servidores Rocky.
 
 ```bash
 ansible-playbook PB_Web_Server.yml
@@ -124,6 +125,17 @@ El playbook `PB_app_web.yml`, instalara podman y creara una aplicacion "todo.war
 ansible-playbook PB_app_web.yml
 ```
 
+## PB_mariadb.yml
+
+El playbook `PB_app_web.yml`, realizara todas las configuraciones necesarias para el funcionamiento de la aplicacion web. Entre ellas: Creacion de usuario, contraseña, base de datos, tablas y permisos.
+
+Al usar archivos sensibles como lo son las contraseñas de root y usuario para la app web, estaran cifrados por vault.
+Por eso es necesario que a la hora de ejecutar el playbook, nos pida la contraseña de los archivos. 
+
+```bash
+ ansible-playbook PB_mariadb.yml --ask-become-pass --ask-vault-pass
+```
+
 
 ## Soporte
 
@@ -134,4 +146,5 @@ Por soporte, email a alexisxdandrea@hotmail.com o mensaje a [nicolasemm](https:/
 
 - [Alexis D'Andra](https://www.github.com/adandrea8)
 - [Nicolas Martins](https://github.com/nicolasemm)
+
 
