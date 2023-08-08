@@ -13,3 +13,10 @@
     state: reloaded
   when: ansible_os_family == 'Debian'
 
+- name: Restart mariadb server
+  service:
+    name: mariadb
+     state: restarted
+  when: ansible_os_family == 'Debian'
+
+
