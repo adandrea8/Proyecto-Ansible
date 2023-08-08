@@ -7,7 +7,7 @@
     
   roles:
     - role: mariadb
-      # - role: firewall.debian  
+    - role: firewall.debian  
 
   tasks:
 
