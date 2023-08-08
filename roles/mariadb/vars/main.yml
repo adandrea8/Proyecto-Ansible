@@ -1,2 +1,5 @@
 ---
 # vars file for mariadb
+
+ include_vars:
+   file: pass.yml
