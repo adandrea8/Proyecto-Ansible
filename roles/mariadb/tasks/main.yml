@@ -23,7 +23,6 @@
     notify: Reload firewalld
 
 
-
   - name: Instalar mariadb en Debian
     apt:
       name: "{{ item }}"
@@ -59,6 +58,47 @@
       proto: tcp
       # notify: Reload ufw
     when: ansible_os_family == 'Debian'
+    
   
+  - name: Configure mariadb to listen on all interfaces
+    lineinfile:
+      path: /etc/mysql/mariadb.conf.d/50-server.cnf
+      regexp: '^bind-address'
+      line: bind-address = 0.0.0.0
+    notify: Restart mariadb server
+
+
+  - name: Update MariaDB root password
+    mysql_user:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      login_user: root
+      login_password: "{{ pass }}"
+      check_implicit_admin: yes 
+      name: root
+      host: "{{ item }}"
+      password: "{{ pass }}" 
+    loop:
+      - 127.0.0.1
+      - localhost
+      - 192.168.56.%
+
+
+  - name: Delete anonymous user
+    mysql_user:
+      login_host: localhost
+      login_user: root
+      login_password: "{{ pass }}"
+      name: ""
+      host_all: yes
+      state: absent
+  
+
+  - name: Delete test database
+    mysql_db:
+      login_host: localhost
+      login_user: root
+      login_password: "{{ pass }}"
+      name: test
+      state: absent
 
 
