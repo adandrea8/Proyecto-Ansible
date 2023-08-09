@@ -34,17 +34,17 @@
     when: ansible_os_family == 'Debian'
 
   - name: Abrir puerto HTTP en Debian
-      ufw:
-        rule: allow
-        port: 80
-        proto: tcp
+    ufw:
+      rule: allow
+      port: 80
+      proto: tcp
     when: ansible_os_family == 'Debian'
 
   - name: Abrir puerto HTTPS en Debian
-      ufw:
-        rule: allow
-        port: 443
-        proto: tcp
+    ufw:
+      rule: allow
+      port: 443
+      proto: tcp
     when: ansible_os_family == 'Debian'
 
   - name: Iniciar y habilitar httpd service en Debian
