@@ -1,7 +1,17 @@
 # _Taller Julio 2023 - ASLX_ 
 Este es un repositorio donde contiene información sobre como utilizar Ansible para las tareas planteadas por el obligatorio de el taller de Linux
-
 Ansible es una herramienta de automatización que permite gestionar la configuración y el despliegue de servidores de manera eficiente y reproducible.
+
+Tareas planteadas:
+   - Instalar y despeglar un servidor apache con funcion de proxy reverso.
+   - Instalar Podman y crear un contenedor en el cual correra una aplicacion web java.
+   - Instalar el motor de base de datos MariaDB y crear la base de datos para la aplicacion web.
+
+Adicionalmente:
+  -  Contiene un playbook para hacer el update de todos los paquetes instalados en los servidores.
+  -  Ademas se habilita el servicio firewall y sus puertos para la correcta funcionalidad del proyecto.
+
+
 
 ### Para utilizar este repositorio
 
