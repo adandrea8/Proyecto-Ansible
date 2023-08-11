@@ -150,7 +150,7 @@ Por eso es necesario que a la hora de ejecutar el playbook, nos pida la contrase
 
 ## Soporte
 
-Por soporte, email a alexisxdandrea@hotmail.com o mensaje a [nicolasemm](https://github.com/nicolasemm)
+Por soporte, email a alexisxdandrea@hotmail.com
 
 
 ## Autores
